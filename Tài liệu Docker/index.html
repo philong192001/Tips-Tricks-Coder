@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login Service Image Document</title>
+    <link rel="stylesheet" href="./style/bootstrap.min.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <style>p {margin-bottom: 6px !important;}</style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="accordion" id="accordion">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="btn-link" type="button" data-toggle="collapse" data-target="#step0"
+                        aria-expanded="true">
+                        I. Tổng quan
+                    </h3>
+                </div>
+                <div id="step0" class="collapse show" data-parent="#accordion">
+                    <div class="card-body">
+                        <h5>1. Cấu trúc thư mục</h5>
+                        <img src="./image/Construct.png" class="w-100"/>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="btn-link" type="button" data-toggle="collapse" data-target="#step1"
+                        aria-expanded="false">
+                        II. Chuẩn bị
+                    </h3>
+                </div>
+                <div id="step1" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <h5>1. Mở command prompt tại folder LoginServiceAlpine</h5>
+                        <img src="./image/images13.PNG" class="w-100"/>
+                        <h5>2. Login vào tài khoản docker 10.26.248.114</h5>
+                        <p>UserId/Password: <b>vhcadmin@vsphere.local/Fit@3011</b></p>
+                        <p>Command: <span class="text-success"><b>docker login https://10.26.248.114</b></span></p>
+                        <img src="./image/images17.PNG" class="w-100"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="btn-link" type="button" data-toggle="collapse" data-target="#step2"
+                        aria-expanded="false">
+                        III. Build image 
+                    </h3>
+                </div>
+                <div id="step2" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <h5>1. Run câu lệnh sau</h5>
+                        <p>Command: <span class="text-success"><b>docker build -t 10.26.248.114/p-login/loginservice:latest ./</b></span></p>
+                        <img src="./image/images15.PNG" class="w-100"/>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="btn-link" type="button" data-toggle="collapse" data-target="#step5"
+                        aria-expanded="false">
+                        IV. Push image lên 10.26.248.114 
+                    </h3>
+                </div>
+                <div id="step5" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <h5>1. Run câu lệnh</h5>
+                        <p>Command: <span class="text-success"><b>docker push 10.26.248.114/p-login/loginservice:latest</b></span></p>
+                        <img src="./image/images2.PNG" class="w-100"/>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="btn-link" type="button" data-toggle="collapse" data-target="#step6"
+                        aria-expanded="false">
+                        V. Run Image 
+                    </h3>
+                </div>
+                <div id="step6" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <h5>1. Pull images về 172.16.0.80 </h5>
+                        <p>Command: <span class="text-success"><b>docker -H 172.16.0.80:2376 --tls pull 10.26.248.114/p-login/loginservice:latest</b></span></p>
+                        <img src="./image/images4.PNG" class="w-100"/>
+                        <h5 class="mt-2">2. Đảm bảo không có images đang kết nối vào ToPublic</h5>
+                        <p>Command: <span class="text-success"><b>docker -H 172.16.0.80:2376 --tls network inspect ToPublic</b></span></p>
+                        <img src="./image/images3.PNG" class="w-100"/>
+                        <p class="ml-3">2.1 Nếu có container đang kết nối vào cần disconnect container đi</p>
+                        <p class="ml-3">Command: <span class="text-success"><b>docker -H 172.16.0.80:2376 --tls network disconnect ToPublic [ContainerId|ContainerName]</b></span>
+						<br> Hoặc <span class="text-success"><b>docker -H 172.16.0.80:2376 --tls rm -f [ContainerId|ContainerName]</b></span></p>
+                        <h5 class="mt-2">3. Run images trên 172.16.0.80 </h5>
+                        <p><b>3.1 Lệnh run cơ bản</b>: <span class="text-success"><b>docker -H 172.16.0.80:2376 --tls run --name loginweb --network ToPublic -itd 10.26.248.114/p-login/loginservice:latest</b></span></p>
+                        <img src="./image/images5.PNG" class="w-100"/>
+                        <p><b>3.2 Các lệnh run giới hạn RAM</b></p>
+                        <p>Sử dụng <span class="text-info"><b>--memory</b></span> khi chạy image để giới hạn RAM. Câu lệnh sau đây sẽ giới hạn RAM container có thể sử dụng là 1GB <b>(g: GB, m: MB, k: KB)</b></p>
+                        <p>Command: <span class="text-success"><b>docker -H 172.16.0.80:2376 --tls run --name loginweb --memory="1g" --network ToPublic -itd 10.26.248.114/p-login/loginservice:latest</b></span></p>
+                        <img src="./image/images9.PNG" class="w-100"/>
+                        <p>Kết hợp <span class="text-info"><b>--memory-swap</b></span> để cho phép container ghi lên disk khi sử dụng hết ram</p>
+                        <p>Command: <span class="text-success"><b>docker -H 172.16.0.80:2376 --tls run --name loginweb --memory="1g" --memory-swap="2g" --network ToPublic -itd 10.26.248.114/p-login/loginservice:latest</b></span></p>
+                        <img src="./image/images10.PNG" class="w-100"/>
+                        <p class="text-danger"><b>Lưu ý:</b><span class="text-info"><b>--memory-swap</b></span> bao gồm dung lượng của <span class="text-info"><b>--memory</b></span> và dung lượng cho phép ghi lên disk.
+                        Câu lệnh trên sẽ cho phép container ghi lên disk 1g khi container đã dùng hết RAM.</p>
+                        <p>Sử dụng <span class="text-info"><b>--memory-reservation</b></span> để giới hạn RAM có thể sử dụng của container nhưng chỉ đưa ra cảnh khi container vượt quá lượng RAM cho phép.</p>
+                        <p>Command: <span class="text-success"><b>docker -H 172.16.0.80:2376 --tls run --name loginweb --memory="1g" --memory-reservation="800m" --network ToPublic -itd 10.26.248.114/p-login/loginservice:latest</b></span></p>
+                        <img src="./image/images11.PNG" class="w-100"/>
+                        <p>Câu lệnh trên sẽ giới hạn tối đa RAM của container là một GB vào đưa ra cảnh báo khi container sử dụng quá 800MB.</p>
+                        <p><b>3.3 Lệnh run giới hạn CPU</b></p>
+                        <p>Để giới hạn cpu mà container có thể sử dụng sử dụng <span class="text-info"><b>--cpus</b></span> <br/>
+                        Câu lệnh sau sẽ giới hạn số cpu là 1.</p>
+                        <p>Command: <span class="text-success"><b>docker -H 172.16.0.80:2376 --tls run --name loginweb --cpus="1.0" --network ToPublic -itd 10.26.248.114/p-login/loginservice:latest</b></span></p>
+                        <img src="./image/images12.PNG" class="w-100"/>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="btn-link" type="button" data-toggle="collapse" data-target="#step8"
+                        aria-expanded="false">
+                        VI. Kiểm tra tài nguyên mà container đang sử dụng
+                    </h3>
+                </div>
+                <div id="step8" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <h5>1. Run câu lệnh</h5>
+                        <p>Command: <span class="text-success"><b>docker -H 172.16.0.80:2376 --tls stats [containerId|containerName]</b></span></p>
+                        <p class="text-warning">"loginservice" là tên hoặc id của container</p>
+                        <img src="./image/images7.PNG" class="w-100"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
